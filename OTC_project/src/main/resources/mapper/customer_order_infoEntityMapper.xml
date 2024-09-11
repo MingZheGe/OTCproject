@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.otc_project.dao.customer_order_infoEntityMapper">
+
+    <insert id="insertCustomer_order_info" parameterType="com.example.otc_project.entity.customer_order_info">
+        insert into customer_order_info (order_id, order_time, account_id, security_id, amount, price, trd_id, order_status, currency, is_withdraw, stk_cls)
+        values (#{order_id,jdbcType=VARCHAR}, #{order_time,jdbcType=DATETIMEOFFSET}, #{account_id,jdbcType=VARCHAR}, #{security_id,jdbcType=VARCHAR}, #{amount,jdbcType=INTEGER}, #{price,jdbcType=FLOAT},#{trd_id,jdbcType=VARCHAR},#{order_status,jdbcType=VARCHAR},#{currency,jdbcType=VARCHAR},#{is_withdraw,jdbcType=VARCHAR},#{stk_cls,jdbcType=VARCHAR})
+    </insert>
+
+    <select id="showCustomer_order_info" resultType="com.example.otc_project.entity.customer_order_info">
+        SELECT *, DATE_FORMAT(order_time, '%Y-%m-%d %H:%i:%s') AS order_time FROM customer_order_info
+</select>
+
+    <select id="selectStatus1" resultType="com.example.otc_project.entity.customer_order_info">
+        SELECT * FROM customer_order_info where order_status = 0 or order_status = 3 or order_status = 4
+    </select>
+
+    <select id="show8order" resultType="com.example.otc_project.entity.customer_order_info">
+        SELECT * FROM customer_order_info where order_status = 8 and account_id = #{account_id,jdbcType=VARCHAR}
+    </select>
+
+    <select id="show5order" resultType="com.example.otc_project.entity.customer_order_info">
+        SELECT * FROM customer_order_info where order_status = 5 and account_id = #{account_id,jdbcType=VARCHAR}
+    </select>
+
+
+    <update id="updateStatus1" parameterType="com.example.otc_project.entity.customer_order_info">
+        UPDATE customer_order_info
+        SET order_status = 1
+        WHERE order_id = #{order_id,jdbcType=VARCHAR};
+    </update>
+
+    <update id="updateOrderfinishamount" parameterType="com.example.otc_project.entity.customer_order_info">
+        UPDATE customer_order_info
+        SET     finishamount =  #{finishamount,jdbcType=INTEGER}
+        WHERE order_id = #{order_id,jdbcType=VARCHAR};
+    </update>
+
+    <update id="updataStatus2" parameterType="com.example.otc_project.entity.customer_order_info">
+        UPDATE customer_order_info
+        SET order_status = 2
+        WHERE order_id = #{order_id,jdbcType=VARCHAR};
+    </update>
+
+    <update id="updateStatus34" parameterType="com.example.otc_project.entity.customer_order_info">
+        UPDATE customer_order_info
+        SET
+            order_status =
+                CASE
+                    WHEN order_status = 0 THEN 3
+                    WHEN order_status = 2 THEN 3
+                    WHEN order_status = 7 THEN 4
+                    ELSE 6
+                    END,
+            is_withdraw = 'T'
+        WHERE order_id = #{order_id, jdbcType=VARCHAR};
+    </update>
+
+
+    <update id="updateStatus8" parameterType="com.example.otc_project.entity.customer_order_info">
+        UPDATE customer_order_info
+        SET order_status =
+                CASE
+                    WHEN (amount - finishamount) > 0 THEN 7
+                    ELSE 8
+                    END
+        WHERE order_status = 2;
+    </update>
+
+    <select id="judgeAccountwithdraw" parameterType="com.example.otc_project.entity.customer_order_info" resultType="com.example.otc_project.entity.customer_order_info">
+        select *
+        from customer_order_info
+        where order_status in (0,2,7)
+    </select>
+
+    <select id="showAccountOrder" parameterType="com.example.otc_project.entity.customer_order_info" resultType="com.example.otc_project.entity.customer_order_info">
+        SELECT *
+        FROM customer_order_info
+        WHERE account_id = #{account_id,jdbcType=VARCHAR}
+        ORDER BY order_time DESC;
+    </select>
+
+    <update id="updateStatus0">
+        UPDATE customer_order_info
+        SET order_status = 9
+        WHERE order_status = 8 ;
+    </update>
+
+
+
+    <update id="updateStatus6" parameterType="com.example.otc_project.entity.customer_order_info">
+        UPDATE customer_order_info
+        SET order_status =
+                CASE
+                    WHEN order_status = 3 THEN 6
+                    WHEN order_status = 4 THEN 5
+                    ELSE order_status
+                    END
+        WHERE order_status IN (3, 4) and order_id = #{order_id,jdbcType=VARCHAR};
+    </update>
+
+    <select id="withdrawMoney" parameterType="com.example.otc_project.entity.customer_order_info" resultType="com.example.otc_project.entity.customer_order_info">
+        select *
+        from customer_order_info
+        where order_id = #{order_id, jdbcType=VARCHAR};
+    </select>
+
+    <update id="updatefinishamount" parameterType="com.example.otc_project.entity.customer_order_info">
+        update customer_order_info
+        set finishamount = #{finishamount,jdbcType=INTEGER}
+        where order_status = 2
+    </update>
+
+</mapper>

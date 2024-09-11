@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.otc_project.dao.customer_opening_infoEntityMapper">
+
+    <insert id="insertCustomer_opening_info" parameterType="com.example.otc_project.entity.customer_opening_info">
+        insert into customer_opening_info (account_id, account_name, id_type, id_number, cuacct_cls, sh_security_account, sz_security_account, customer_rest, cuacct_status)
+        values (#{account_id,jdbcType=VARCHAR}, #{account_name,jdbcType=VARCHAR}, #{id_type,jdbcType=VARCHAR}, #{id_number,jdbcType=VARCHAR}, #{cuacct_cls,jdbcType=VARCHAR}, #{sh_security_account,jdbcType=VARCHAR},#{sz_security_account,jdbcType=VARCHAR},#{customer_rest,jdbcType=FLOAT},#{cuacct_status,jdbcType=VARCHAR})
+    </insert>
+
+    <select id="showCustomer_opening_info" resultType="com.example.otc_project.entity.customer_opening_info">
+        SELECT * FROM customer_opening_info
+    </select>
+
+    <update id="updateCustomer_rest" parameterType="com.example.otc_project.entity.customer_opening_info">
+        update customer_opening_info
+        set customer_rest = customer_rest - #{customer_rest,jdbcType=FLOAT}
+        where account_id = #{account_id,jdbcType=VARCHAR}
+    </update>
+
+    <update id="updateCustomer_SH_info" parameterType="com.example.otc_project.entity.customer_opening_info">
+        update customer_opening_info
+        set sh_security_account = #{sh_security_account,jdbcType=FLOAT}
+        where account_id = #{account_id,jdbcType=VARCHAR}
+    </update>
+
+    <update id="updateCustomer_SZ_info" parameterType="com.example.otc_project.entity.customer_opening_info">
+        update customer_opening_info
+        set sz_security_account = #{sz_security_account,jdbcType=FLOAT}
+        where account_id = #{account_id,jdbcType=VARCHAR}
+    </update>
+
+    <select id="searchCustomer" parameterType="com.example.otc_project.entity.customer_opening_info" resultType="com.example.otc_project.entity.customer_opening_info">
+        SELECT * FROM customer_opening_info
+        where account_id = #{account_id,jdbcType=VARCHAR}
+    </select>
+
+</mapper>

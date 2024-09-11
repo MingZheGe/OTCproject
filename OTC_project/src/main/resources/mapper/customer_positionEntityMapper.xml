@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.otc_project.dao.customer_positionEntityMapper">
+
+    <insert id="insertCustomer_position" parameterType="java.util.List" >
+        INSERT INTO customer_position (account_id, security_id, security_name, position, amount)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.account_id,jdbcType=VARCHAR}, #{item.security_id,jdbcType=VARCHAR}, #{item.security_name,jdbcType=VARCHAR}, #{item.position,jdbcType=FLOAT},#{item.amount,jdbcType=INTEGER})
+        </foreach>
+    </insert>
+
+    <select id="groupcustomerAllposition" parameterType="com.example.otc_project.entity.customer_position" resultType="com.example.otc_project.entity.customer_position">
+        SELECT account_id, security_id, security_name, SUM(amount) AS amount,SUM(position) AS position
+        FROM customer_position
+        WHERE account_id = #{account_id}
+        GROUP BY account_id, security_id, security_name;
+
+    </select>
+
+    <select id="showAccountposition" parameterType="com.example.otc_project.entity.customer_position" resultType="com.example.otc_project.entity.customer_position">
+        SELECT *
+        FROM customer_position
+        WHERE account_id = #{account_id} and amount != 0
+    </select>
+    
+    <delete id="deleteAccountpostion" parameterType="com.example.otc_project.entity.customer_position">
+        delete 
+        from customer_position
+        where account_id = #{account_id}
+    </delete>
+    
+    <insert id="insertGroupposition" parameterType="java.util.List">
+        INSERT INTO customer_position (account_id, security_id, security_name, position,amount)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.account_id,jdbcType=VARCHAR}, #{item.security_id,jdbcType=VARCHAR}, #{item.security_name,jdbcType=VARCHAR}, #{item.position,jdbcType=FLOAT},#{item.amount,jdbcType=INTEGER})
+        </foreach>
+    </insert>
+
+</mapper>

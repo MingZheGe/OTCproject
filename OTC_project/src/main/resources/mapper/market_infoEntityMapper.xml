@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.otc_project.dao.market_infoEntityMapper">
+
+<!--    <insert id="insertCustomer_opening_info" parameterType="com.example.otc_project.entity.customer_opening_info">-->
+<!--        insert into customer_opening_info (account_id, account_name, id_type, id_number, cuacct_cls, sh_security_account, sz_security_account, customer_rest, cuacct_status)-->
+<!--        values (#{account_id,jdbcType=INTEGER}, #{account_name,jdbcType=VARCHAR}, #{id_type,jdbcType=VARCHAR}, #{id_number,jdbcType=VARCHAR}, #{cuacct_cls,jdbcType=VARCHAR}, #{sh_security_account,jdbcType=VARCHAR},#{sz_security_account,jdbcType=VARCHAR},#{customer_rest,jdbcType=FLOAT},#{cuacct_status,jdbcType=VARCHAR})-->
+<!--    </insert>-->
+
+    <select id="showMarket_info" resultType="com.example.otc_project.entity.market_info">
+        SELECT * FROM market_info
+    </select>
+
+    <select id="searchMarket_info" resultType="com.example.otc_project.entity.market_info">
+        SELECT * FROM market_info
+        WHERE security_id = #{security_id,jdbcType=VARCHAR}
+    </select>
+
+</mapper>
